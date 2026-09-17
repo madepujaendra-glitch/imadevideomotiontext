@@ -448,7 +448,7 @@
     <a href="#top" class="logo">imadevideo</a>
     <div class="nav-actions">
       <a href="#" class="nav-login">Login</a>
-      <a href="#harga" class="btn btn-primary btn-sm">Beli Rp 99K</a>
+      <a href="#harga" class="btn btn-primary btn-sm to-checkout">Beli Rp 99K</a>
     </div>
   </div>
 </nav>
@@ -460,7 +460,7 @@
     <h1>Buat Apple Style Edit<br><span class="serif tint">10x lebih cepat</span></h1>
     <p class="sub">Tanpa harus makan waktu berjam-jam. Pemula dijamin bisa.</p>
     <div class="hero-ctas">
-      <a href="#harga" class="btn btn-primary btn-lg">Dapatkan Akses Instan</a>
+      <a href="#harga" class="btn btn-primary btn-lg to-checkout">Dapatkan Akses Instan</a>
       <a href="#cara" class="hero-textlink">Lihat cara pakainya <span class="chev">&rsaquo;</span></a>
     </div>
     <p class="hero-note">Konten lo auto <b>premium kayak Apple.</b></p>
@@ -564,7 +564,7 @@
       </div>
     </div>
     <p class="steps-note"><b>Beneran cuma itu.</b> Gak ada bagian "bikin dari nol".</p>
-    <div style="margin-top:1.8rem"><a href="#harga" class="btn btn-primary btn-lg">Mau cobain!</a></div>
+    <div style="margin-top:1.8rem"><a href="#harga" class="btn btn-primary btn-lg to-checkout">Mau cobain!</a></div>
   </div>
 </section>
 
@@ -739,7 +739,7 @@
     <div class="band">
       <h2>Dipastiin 100% lo bisa bikin<br><span class="serif tint">Apple Style Editing</span> di CapCut.</h2>
       <p>ATM Kit ini selamanya akan milik lo.</p>
-      <a href="#harga" class="btn btn-primary btn-lg">Download Sekarang!</a>
+      <a href="#harga" class="btn btn-primary btn-lg to-checkout">Download Sekarang!</a>
     </div>
   </div>
 </section>
@@ -808,7 +808,7 @@
           <div class="old">Harga normal Rp 199.000</div>
           <div class="now"><small>Rp</small> 99K</div>
           <div class="oneshot">Sekali bayar. Putus. Langsung akses.</div>
-          <a href="https://wa.me/6281243532553?text=Halo%20imadevideo!%20Gua%20mau%20checkout%20ATM%20Kit%20Rp%2099K." target="_blank" rel="noopener" class="btn btn-primary btn-lg btn-block">Checkout Sekarang Rp 99K</a>
+          <a id="checkout-btn" href="https://wa.me/6281243532553?text=Halo%20imadevideo!%20Gua%20mau%20checkout%20ATM%20Kit%20Rp%2099K." target="_blank" rel="noopener" class="btn btn-primary btn-lg btn-block">Checkout Sekarang Rp 99K</a>
         </div>
       </div>
     </div>
@@ -888,7 +888,7 @@
   <div class="wrap">
     <h2>Konten lo bisa keliatan<br><span class="serif tint">mahal mulai hari ini</span></h2>
     <p>Satu kit lengkap buat Apple Style Editing, tinggal drag &amp; drop di CapCut Desktop.</p>
-    <div class="btnrow"><a href="#harga" class="btn btn-primary btn-lg">Gua Mau Rp 99K</a></div>
+    <div class="btnrow"><a href="#harga" class="btn btn-primary btn-lg to-checkout">Gua Mau Rp 99K</a></div>
   </div>
 </section>
 
@@ -943,8 +943,25 @@
 <!-- STICKY MOBILE BUY -->
 <div class="sticky-buy">
   <div class="p"><b>Rp 99K</b><small>Rp 199.000</small></div>
-  <a href="#harga" class="btn btn-primary">Beli Sekarang</a>
+  <a href="#harga" class="btn btn-primary to-checkout">Beli Sekarang</a>
 </div>
+
+<script>
+/* Semua tombol CTA (.to-checkout) diarahkan ke tujuan yang sama dengan tombol Checkout.
+   Ganti URL checkout cukup di #checkout-btn saja, tombol lain otomatis ikut. */
+(function(){
+  var co = document.getElementById('checkout-btn');
+  if(!co) return;
+  var href = co.getAttribute('href');
+  var target = co.getAttribute('target');
+  var rel = co.getAttribute('rel');
+  document.querySelectorAll('.to-checkout').forEach(function(b){
+    b.setAttribute('href', href);
+    if(target) b.setAttribute('target', target); else b.removeAttribute('target');
+    if(rel) b.setAttribute('rel', rel); else b.removeAttribute('rel');
+  });
+})();
+</script>
 
 <script>
 /* Pop-in reveal saat scroll — semua blok utama muncul dengan fade+rise+scale */
