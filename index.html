@@ -116,7 +116,7 @@
   .hero-video .play{width:58px;height:58px;border-radius:50%;
     background:linear-gradient(135deg,#e3ff66,var(--primary));display:grid;place-items:center;
     box-shadow:0 0 30px rgba(195,255,0,0.38)}
-  .hero-video .play svg{margin-left:2px}
+  .hero-video .play svg{margin-left:1px}
   .hero-video .vtxt{position:absolute;bottom:1.4rem;font-size:0.82rem;color:var(--muted);font-weight:600;letter-spacing:.3px}
 
   /* stat strip */
@@ -435,7 +435,7 @@
   }
 
   /* POP-IN on scroll */
-  .js-pop [data-pop]{opacity:0;transform:translateY(22px) scale(0.985);will-change:opacity,transform;transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+  .js-pop [data-pop]{opacity:0;transform:translateY(18px) scale(0.99);will-change:opacity,transform;transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)}
   .js-pop [data-pop].pop-in{opacity:1;transform:none;will-change:auto}
   @media(prefers-reduced-motion:reduce){.js-pop [data-pop]{opacity:1!important;transform:none!important;transition:none!important}}
 </style>
@@ -465,7 +465,7 @@
     </div>
     <p class="hero-note">Konten lo auto <b>premium kayak Apple.</b></p>
     <div class="hero-video" onclick="this.querySelector('.vtxt').textContent='▶ Sambungkan video preview lo di sini'">
-      <div class="play"><svg width="20" height="20" viewBox="0 0 24 24" fill="#06060a"><path d="M9 6v12l9-6z"/></svg></div>
+      <div class="play"><svg width="20" height="20" viewBox="0 0 24 24" fill="#06060a"><path d="M7.5 6v12l9-6z"/></svg></div>
       <div class="vtxt">▶ Lihat preview ATM Kit</div>
     </div>
   </div>
@@ -970,11 +970,11 @@
       var el = en.target;
       var sibs = [].slice.call(el.parentElement.children).filter(function(c){ return c.hasAttribute && c.hasAttribute('data-pop'); });
       var idx = sibs.indexOf(el);
-      el.style.transitionDelay = (Math.min(Math.max(0, idx), 6) * 55) + 'ms';
+      el.style.transitionDelay = (Math.min(Math.max(0, idx), 5) * 40) + 'ms';
       el.classList.add('pop-in');
       obs.unobserve(el);
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -12% 0px' });
+  }, { threshold: 0, rootMargin: '0px 0px -6% 0px' });
   els.forEach(function(el){ obs.observe(el); });
 })();
 </script>
