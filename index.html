@@ -947,6 +947,20 @@
 </div>
 
 <script>
+/* Tombol CTA (.to-checkout) → scroll tepat ke tombol Checkout (posisi tengah layar) */
+(function(){
+  var target = document.getElementById('checkout-btn');
+  if(!target) return;
+  document.querySelectorAll('.to-checkout').forEach(function(b){
+    b.addEventListener('click', function(e){
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+})();
+</script>
+
+<script>
 /* Pop-in reveal saat scroll — semua blok utama muncul dengan fade+rise+scale */
 (function(){
   if(!('IntersectionObserver' in window)) return;
