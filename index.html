@@ -973,7 +973,15 @@
       } else { visible.delete(en.target); }
     });
   }, { threshold: 0.5 });
-  nums.forEach(function(el){ obs.observe(el); });
+  // Kunci lebar angka supaya jumlah digit yang berubah saat menghitung TIDAK
+  // menggeser layout (penyebab utama "flicker" saat counting di HP).
+  nums.forEach(function(el){
+    el.style.display = 'inline-block';
+    el.style.textAlign = 'center';
+    el.style.fontVariantNumeric = 'tabular-nums';
+    el.style.minWidth = String(el.dataset.target).length + 'ch';
+    obs.observe(el);
+  });
 })();
 </script>
 
