@@ -450,7 +450,8 @@
   /* Semua perangkat sentuh (termasuk Android/iPad): jangan pakai shine text yang jank,
      dan jangan pre-promote banyak layer (will-change) sekaligus */
   @media(hover:none){
-    .strip b,.xp-card b{animation:none;background-position:50% 0}
+    /* angka jadi lime SOLID (bukan gradient-clip) → counting bisa jalan tanpa repaint mahal/flicker */
+    .strip b,.xp-card b{animation:none;background:none;-webkit-background-clip:border-box;background-clip:border-box;-webkit-text-fill-color:var(--primary);color:var(--primary)}
     .kit-badge{animation:none}
     .js-pop [data-pop]{will-change:auto}
   }
@@ -941,10 +942,11 @@
   var DO_LOOP = mq('(hover:hover) and (pointer:fine)').matches;
   var HOLD = 1600; // jeda di angka penuh sebelum menghitung ulang (ms)
 
-  // Di HP/tablet (perangkat sentuh) & reduce-motion: JANGAN counting sama sekali —
-  // angka teks-gradient yang berubah tiap frame = repaint penuh = flicker di iOS.
-  // Tampilkan angka final langsung; reveal pop-in tetap memberi gerak.
-  if(REDUCE || !DO_LOOP || !('IntersectionObserver' in window)){
+  // Reduce-motion / browser lawas: tampilkan angka final langsung.
+  // Catatan: di HP angka dibuat warna solid (lihat CSS @media(hover:none)) supaya
+  // counting tidak me-repaint teks-gradient (penyebab flicker). Di HP counting jalan
+  // SEKALI (DO_LOOP=false), di desktop terus berulang.
+  if(REDUCE || !('IntersectionObserver' in window)){
     nums.forEach(function(el){ el.textContent = el.dataset.target; });
     return;
   }
