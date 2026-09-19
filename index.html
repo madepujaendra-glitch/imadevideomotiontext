@@ -941,7 +941,10 @@
   var DO_LOOP = mq('(hover:hover) and (pointer:fine)').matches;
   var HOLD = 1600; // jeda di angka penuh sebelum menghitung ulang (ms)
 
-  if(REDUCE || !('IntersectionObserver' in window)){
+  // Di HP/tablet (perangkat sentuh) & reduce-motion: JANGAN counting sama sekali —
+  // angka teks-gradient yang berubah tiap frame = repaint penuh = flicker di iOS.
+  // Tampilkan angka final langsung; reveal pop-in tetap memberi gerak.
+  if(REDUCE || !DO_LOOP || !('IntersectionObserver' in window)){
     nums.forEach(function(el){ el.textContent = el.dataset.target; });
     return;
   }
