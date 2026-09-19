@@ -456,8 +456,9 @@
     .js-pop [data-pop]{will-change:auto}
   }
 
-  /* POP-IN on scroll */
-  .js-pop [data-pop]{opacity:0;transform:translateY(18px) scale(0.99);will-change:opacity,transform;transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)}
+  /* POP-IN on scroll — lebih terasa, konsisten, akurat */
+  .js-pop [data-pop]{opacity:0;transform:translateY(26px) scale(0.985);will-change:opacity,transform;
+    transition:opacity .4s cubic-bezier(.22,1,.36,1),transform .46s cubic-bezier(.22,1,.36,1)}
   .js-pop [data-pop].pop-in{opacity:1;transform:none;will-change:auto}
   @media(prefers-reduced-motion:reduce){.js-pop [data-pop]{opacity:1!important;transform:none!important;transition:none!important}}
 </style>
@@ -1008,11 +1009,11 @@
 <script>
 /* Pop-in reveal saat scroll — semua blok utama muncul dengan fade+rise+scale */
 (function(){
-  if(!('IntersectionObserver' in window)) return;
+  if(!('IntersectionObserver' in window)){ return; }
   var sel = '.hero h1,.hero .sub,.hero-ctas,.hero-note,.hero-video,'
           + '.strip .wrap,.marquee-sec,'
-          + '.badge,.head,.lead,.step,.steps-note,'
-          + '.kit-card,.band,'
+          + '.badge,.head,.lead,.steps-note,'
+          + '.step,.kit-card,.band,'
           + '.ba .col,.tcard,'
           + '.price-card,.garansi,'
           + '.creator-name,.creator-handle,.creator-photo,.creator-bio,.creator-xp-title,.xp-card,.creator-role,.creator-closing,'
@@ -1020,20 +1021,45 @@
           + '.final h2,.final p,.final .btnrow,'
           + '.foot-in,.foot-legal';
   var els = [].slice.call(document.querySelectorAll(sel));
-  if(!els.length) return;
+  if(!els.length){ return; }
   document.documentElement.classList.add('js-pop');
   els.forEach(function(el){ el.setAttribute('data-pop',''); });
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if(!en.isIntersecting) return;
-      var el = en.target;
-      var sibs = [].slice.call(el.parentElement.children).filter(function(c){ return c.hasAttribute && c.hasAttribute('data-pop'); });
-      var idx = sibs.indexOf(el);
-      el.style.transitionDelay = (Math.min(Math.max(0, idx), 5) * 40) + 'ms';
-      el.classList.add('pop-in');
-      obs.unobserve(el);
+
+  // Auto-catch: blok mandiri langsung di dalam section > .wrap yang belum ke-tag
+  // (mis. tombol CTA lepas seperti "Mau cobain!"). Container yang isinya sudah
+  // ter-tag (mis. .steps, .cards) dilewati supaya tidak dobel.
+  [].forEach.call(document.querySelectorAll('section > .wrap'), function(w){
+    if(w.hasAttribute('data-pop')) return;
+    [].forEach.call(w.children, function(c){
+      if(c.nodeType !== 1) return;
+      if(c.hasAttribute('data-pop')) return;
+      if(c.querySelector('[data-pop]')) return;
+      c.setAttribute('data-pop','');
+      els.push(c);
     });
-  }, { threshold: 0, rootMargin: '0px 0px -6% 0px' });
+  });
+
+  // Stagger STABIL: index tiap elemen di antara saudara ber-data-pop dihitung SEKALI
+  // (tidak berubah walau sebagian sudah tampil) → ritme konsisten di setiap section.
+  var STEP = 45, CAP = 4;
+  els.forEach(function(el){
+    var sibs = [].slice.call(el.parentElement.children).filter(function(c){
+      return c.nodeType === 1 && c.hasAttribute('data-pop');
+    });
+    el.__popIdx = Math.min(Math.max(0, sibs.indexOf(el)), CAP);
+  });
+
+  var obs = new IntersectionObserver(function(entries){
+    // yang masuk bersamaan → reveal urut atas→bawah biar terasa mengalir
+    entries.filter(function(en){ return en.isIntersecting; })
+      .sort(function(a,b){ return a.boundingClientRect.top - b.boundingClientRect.top; })
+      .forEach(function(en){
+        var el = en.target;
+        el.style.transitionDelay = ((el.__popIdx || 0) * STEP) + 'ms';
+        el.classList.add('pop-in');
+        obs.unobserve(el);
+      });
+  }, { threshold: 0, rootMargin: '0px 0px 12% 0px' });
   els.forEach(function(el){ obs.observe(el); });
 })();
 </script>
