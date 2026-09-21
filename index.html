@@ -15,8 +15,10 @@
     --card-2:   #14141f;
     --text:     #F2F0EA;
     --muted:    #b8b5ac;
-    --hairline: rgba(242,240,234,0.09);
+    --hairline: rgba(242,240,234,0.30);
     --glow:     rgba(195,255,0,0.14);
+    /* glow tipis di tepi kartu: ring 1px super halus + halo lembut & rapat */
+    --edge-glow: 0 0 0 1px rgba(195,255,0,0.05), 0 0 16px -8px rgba(195,255,0,0.30);
     --font: 'Manrope', system-ui, -apple-system, Arial, sans-serif;
     --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
     --ease: cubic-bezier(0.25,0.46,0.45,0.94);
@@ -80,9 +82,9 @@
   .nav-inner{
     max-width:var(--wrap);margin:0 auto;display:flex;align-items:center;justify-content:space-between;
     background:#0c0c14;
-    border:1px solid rgba(255,255,255,0.08);border-radius:100px;
+    border:1px solid var(--hairline);border-radius:100px;
     padding:0.5rem 0.6rem 0.5rem 1.5rem;
-    box-shadow:0 10px 34px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.05);
+    box-shadow:0 10px 34px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.05),var(--edge-glow);
   }
   @supports ((backdrop-filter:blur(8px)) or (-webkit-backdrop-filter:blur(8px))){
     @media(hover:hover) and (pointer:fine){
@@ -116,7 +118,7 @@
     max-width:880px;margin:3.5rem auto 0;aspect-ratio:16/9;min-height:190px;border-radius:20px;overflow:hidden;
     border:1px solid var(--hairline);position:relative;
     background:radial-gradient(circle at 50% 40%,#16161f,#0a0a12);
-    box-shadow:0 30px 90px rgba(0,0,0,0.55),0 0 60px -20px rgba(195,255,0,0.15);
+    box-shadow:0 30px 90px rgba(0,0,0,0.55),0 0 60px -20px rgba(195,255,0,0.15),var(--edge-glow);
     display:flex;align-items:center;justify-content:center;cursor:pointer;
   }
   .hero-video .play{position:relative;z-index:1}
@@ -151,6 +153,7 @@
   /* STEPS */
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:3rem}
   .step{background:var(--card);border:1px solid var(--hairline);border-radius:var(--radius);padding:1.1rem;
+    box-shadow:var(--edge-glow);
     transition:transform .35s var(--ease),border-color .35s,box-shadow .35s}
   .step:hover{transform:translateY(-5px);border-color:rgba(195,255,0,0.28);box-shadow:0 20px 50px rgba(0,0,0,0.4),0 0 30px -8px var(--glow)}
   .step .num{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.2rem;
@@ -228,7 +231,7 @@
   /* CARDS (isi kit) — visual preview + animated number badge */
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:3rem;text-align:left}
   .kit-card{background:var(--card);border:1px solid var(--hairline);border-radius:22px;padding:0.9rem 0.9rem 0.4rem;
-    transition:transform .4s var(--ease),border-color .4s,box-shadow .4s;box-shadow:0 0 30px -8px var(--glow)}
+    transition:transform .4s var(--ease),border-color .4s,box-shadow .4s;box-shadow:0 0 30px -8px var(--glow),var(--edge-glow)}
   .kit-card:hover{transform:translateY(-6px);border-color:rgba(195,255,0,0.26);box-shadow:0 26px 60px rgba(0,0,0,0.42),0 0 42px -6px var(--glow)}
   .kit-visual{position:relative;border-radius:16px;overflow:hidden;height:236px;background:#15151d}
   .kit-visual.dark{background:#1a1a20}
@@ -286,13 +289,13 @@
   /* BAND */
   .band{margin-top:3.4rem;text-align:center;border-radius:var(--radius);padding:3.6rem 2rem;
     background:radial-gradient(circle at 50% 0%,rgba(195,255,0,0.1),transparent 60%),var(--card);
-    border:1px solid rgba(195,255,0,0.16)}
+    border:1px solid rgba(195,255,0,0.16);box-shadow:var(--edge-glow)}
   .band h2{font-weight:800;font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:-0.8px}
   .band p{color:var(--muted);margin:1rem auto 2rem;max-width:460px}
 
   /* BEFORE/AFTER */
   .ba{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:3rem}
-  .ba .col{border-radius:var(--radius);padding:1.8rem;border:1px solid var(--hairline)}
+  .ba .col{border-radius:var(--radius);padding:1.8rem;border:1px solid var(--hairline);box-shadow:var(--edge-glow)}
   .ba .before{background:var(--card)}
   .ba .after{background:linear-gradient(135deg,rgba(195,255,0,0.06),var(--card));border-color:rgba(195,255,0,0.25)}
   .ba .lbl{font-size:0.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1.1rem}
@@ -307,7 +310,7 @@
   .tcard{flex:0 1 calc((100% - 2.4rem)/3);display:flex;flex-direction:column;
     background:linear-gradient(180deg,rgba(20,20,30,0.72),rgba(12,12,20,0.55));
     border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:1.6rem;
-    box-shadow:0 0 30px -6px var(--glow);transition:transform .4s var(--ease),border-color .4s,box-shadow .4s}
+    box-shadow:0 0 30px -6px var(--glow),var(--edge-glow);transition:transform .4s var(--ease),border-color .4s,box-shadow .4s}
   .tcard:hover{transform:translateY(-5px);border-color:rgba(195,255,0,0.24);box-shadow:0 22px 50px rgba(0,0,0,0.4),0 0 30px -4px var(--glow)}
   .tcard .stars{color:var(--primary);font-size:0.9rem;letter-spacing:3px;margin-bottom:0.85rem}
   .tcard .txt{font-size:0.95rem;line-height:1.72;color:rgba(242,240,234,0.9);flex:1}
@@ -319,7 +322,7 @@
   /* PRICING */
   .price-wrap{max-width:600px;margin:3rem auto 0}
   .price-card{background:var(--card);border:1px solid rgba(195,255,0,0.25);border-radius:24px;overflow:hidden;
-    box-shadow:0 30px 80px rgba(0,0,0,0.5),0 0 60px -18px var(--glow)}
+    box-shadow:0 30px 80px rgba(0,0,0,0.5),0 0 60px -18px var(--glow),var(--edge-glow)}
   .price-head{padding:1.8rem 2rem 1.4rem;border-bottom:1px solid var(--hairline)}
   .price-head h3{font-size:1.25rem;font-weight:800}
   .price-head p{margin:0.4rem 0 0;color:var(--muted);font-size:0.9rem}
@@ -340,7 +343,7 @@
 
   /* GARANSI */
   .garansi{max-width:680px;margin:2.2rem auto 0;background:rgba(195,255,0,0.04);
-    border:1px solid rgba(195,255,0,0.2);border-radius:var(--radius);padding:1.8rem 2rem}
+    border:1px solid rgba(195,255,0,0.2);border-radius:var(--radius);padding:1.8rem 2rem;box-shadow:var(--edge-glow)}
   .garansi h3{font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:0.6rem;margin-bottom:0.9rem;color:var(--primary)}
   .garansi p{margin:0 0 0.7rem;color:var(--muted);font-size:0.9rem;line-height:1.7}
   .garansi p:last-child{margin:0;font-size:0.8rem;opacity:0.8}
@@ -360,7 +363,7 @@
   .creator-bio p b{color:var(--text)}
   .creator-xp-title{font-weight:800;font-size:clamp(1.7rem,3.8vw,2.6rem);letter-spacing:-0.5px;margin:3.4rem 0 2rem}
   .xp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
-  .xp-card{background:var(--card);border:1px solid var(--hairline);border-radius:20px;padding:2.6rem 1.4rem;box-shadow:0 0 30px -8px var(--glow)}
+  .xp-card{background:var(--card);border:1px solid var(--hairline);border-radius:20px;padding:2.6rem 1.4rem;box-shadow:0 0 30px -8px var(--glow),var(--edge-glow)}
   .xp-card b{display:block;font-size:clamp(2rem,4.2vw,2.9rem);font-weight:800;letter-spacing:-1px;margin-bottom:0.5rem;
     background:linear-gradient(100deg,var(--primary) 46%,#f4ffce 50%,var(--primary) 54%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:textShine 4.5s ease-in-out infinite}
   .xp-card > span{color:var(--muted);font-weight:600;font-size:0.95rem}
@@ -456,9 +459,10 @@
     .js-pop [data-pop]{will-change:auto}
   }
 
-  /* POP-IN on scroll — lebih terasa, konsisten, akurat */
-  .js-pop [data-pop]{opacity:0;transform:translateY(26px) scale(0.985);will-change:opacity,transform;
-    transition:opacity .4s cubic-bezier(.22,1,.36,1),transform .46s cubic-bezier(.22,1,.36,1)}
+  /* POP-IN on scroll — transisi dengan easing mantul (overshoot) biar "pop"-nya kerasa,
+     tanpa mengunci transform (hover-lift kartu tetap jalan) */
+  .js-pop [data-pop]{opacity:0;transform:translateY(30px) scale(.93);will-change:transform,opacity;
+    transition:opacity .42s ease-out, transform .56s cubic-bezier(.34,1.56,.44,1)}
   .js-pop [data-pop].pop-in{opacity:1;transform:none;will-change:auto}
   @media(prefers-reduced-motion:reduce){.js-pop [data-pop]{opacity:1!important;transform:none!important;transition:none!important}}
 </style>
@@ -1009,7 +1013,6 @@
 <script>
 /* Pop-in reveal saat scroll — semua blok utama muncul dengan fade+rise+scale */
 (function(){
-  if(!('IntersectionObserver' in window)){ return; }
   var sel = '.hero h1,.hero .sub,.hero-ctas,.hero-note,.hero-video,'
           + '.strip .wrap,.marquee-sec,'
           + '.badge,.head,.lead,.steps-note,'
@@ -1041,7 +1044,7 @@
 
   // Stagger STABIL: index tiap elemen di antara saudara ber-data-pop dihitung SEKALI
   // (tidak berubah walau sebagian sudah tampil) → ritme konsisten di setiap section.
-  var STEP = 45, CAP = 4;
+  var STEP = 60, CAP = 5;
   els.forEach(function(el){
     var sibs = [].slice.call(el.parentElement.children).filter(function(c){
       return c.nodeType === 1 && c.hasAttribute('data-pop');
@@ -1049,18 +1052,51 @@
     el.__popIdx = Math.min(Math.max(0, sibs.indexOf(el)), CAP);
   });
 
-  var obs = new IntersectionObserver(function(entries){
-    // yang masuk bersamaan → reveal urut atas→bawah biar terasa mengalir
-    entries.filter(function(en){ return en.isIntersecting; })
-      .sort(function(a,b){ return a.boundingClientRect.top - b.boundingClientRect.top; })
-      .forEach(function(en){
-        var el = en.target;
-        el.style.transitionDelay = ((el.__popIdx || 0) * STEP) + 'ms';
-        el.classList.add('pop-in');
-        obs.unobserve(el);
-      });
-  }, { threshold: 0, rootMargin: '0px 0px 12% 0px' });
-  els.forEach(function(el){ obs.observe(el); });
+  // Reduce-motion: langsung tampil, tanpa animasi.
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches){
+    els.forEach(function(el){ el.classList.add('pop-in'); el.style.willChange='auto'; });
+    return;
+  }
+
+  function reveal(el){
+    var d = (el.__popIdx || 0) * STEP;
+    el.style.transitionDelay = d + 'ms';
+    el.classList.add('pop-in');
+    // bersihkan delay + will-change setelah pop selesai, biar hover tetap responsif
+    setTimeout(function(){ el.style.transitionDelay = ''; el.style.willChange = 'auto'; }, d + 700);
+  }
+
+  // Reveal berbasis POSISI (scroll + rAF), bukan IntersectionObserver:
+  // cek posisi tiap elemen tiap frame scroll → tidak akan "kelewat" walau di-flick
+  // kencang di mobile (IO bisa skip elemen yang lewat cepat → stuck invisible).
+  var pending = els.slice();
+  var ticking = false;
+  function sweep(){
+    ticking = false;
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var trigger = vh * 0.92;              // muncul saat elemen mulai masuk (~8% dari bawah)
+    var hit = [];
+    for(var i=0;i<pending.length;i++){
+      if(pending[i].getBoundingClientRect().top < trigger) hit.push(pending[i]);
+    }
+    if(hit.length){
+      hit.sort(function(a,b){ return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
+      hit.forEach(reveal);
+      pending = pending.filter(function(el){ return !el.classList.contains('pop-in'); });
+    }
+    if(!pending.length){
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    }
+  }
+  function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(sweep); } }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', onScroll, { passive:true });
+  requestAnimationFrame(sweep);   // reveal above-the-fold saat load
+  // Jaring pengaman: iOS menjeda scroll-event/rAF/IO saat momentum-scroll, jadi elemen
+  // yang di-flick lewat bisa "kelewat". Interval ini menyapu ulang tiap 250ms (berhenti
+  // sendiri saat semua sudah muncul) → dijamin tidak ada elemen yang stuck.
+  var iv = setInterval(function(){ sweep(); if(!pending.length) clearInterval(iv); }, 250);
 })();
 </script>
 
