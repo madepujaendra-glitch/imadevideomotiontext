@@ -312,8 +312,8 @@
   @media (prefers-reduced-motion:reduce){.v2 .dd-au{opacity:1}}
 
   /* CARDS (isi kit) — visual preview + animated number badge */
-  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:3rem;text-align:left}
-  .kit-card{background:var(--card);border:1px solid var(--hairline);border-radius:22px;padding:0.9rem 0.9rem 0.4rem;
+  .cards{display:flex;flex-wrap:wrap;justify-content:center;gap:1.4rem;margin-top:3rem;text-align:left}
+  .kit-card{background:var(--card);border:1px solid var(--hairline);border-radius:22px;padding:0.9rem 0.9rem 0.4rem;flex:1 1 calc((100% - 2.8rem)/3);max-width:calc((100% - 2.8rem)/3);
     transition:transform .4s var(--ease),border-color .4s,box-shadow .4s;box-shadow:0 0 30px -8px var(--glow),var(--edge-glow)}
   .kit-card:hover{transform:translateY(-6px);border-color:rgba(195,255,0,0.26);box-shadow:0 26px 60px rgba(0,0,0,0.42),0 0 42px -6px var(--glow)}
   .kit-visual{position:relative;border-radius:16px;overflow:hidden;height:236px;background:#15151d}
@@ -491,6 +491,7 @@
   .foot-in{max-width:var(--wrap);margin:0 auto;padding-inline:22px;display:flex;align-items:center;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
   .foot-brand{display:flex;align-items:center;gap:0.7rem;font-weight:800;color:var(--primary)}
   .foot-brand .dot{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#e3ff66,var(--primary));color:#06060a;display:grid;place-items:center;font-size:0.85rem;font-weight:800}
+  .foot-brand img.favatar{width:32px;height:32px;border-radius:50%;object-fit:cover;flex:0 0 auto}
   .foot-links{display:flex;gap:1.4rem}
   .foot-links a{color:var(--muted);font-weight:600;font-size:0.9rem}
   .foot-links a:hover{color:var(--primary)}
@@ -506,7 +507,7 @@
   .sticky-buy .btn{flex:1;max-width:220px}
 
   @media(max-width:960px){
-    .cards{grid-template-columns:repeat(2,1fr)}
+    .kit-card{flex-basis:calc((100% - 1.4rem)/2);max-width:calc((100% - 1.4rem)/2)}
     .faq-wrap{grid-template-columns:1fr;gap:1.6rem}
     .faq-left{position:static}
   }
@@ -517,7 +518,7 @@
   @media(max-width:680px){
     section{padding-block:56px}
     .steps,.ba{grid-template-columns:1fr}
-    .cards{grid-template-columns:1fr}
+    .kit-card{flex-basis:100%;max-width:100%}
     .xp-cards{gap:0.55rem}
     .xp-card{padding:1.2rem 0.4rem;border-radius:14px}
     .xp-card b{font-size:1.4rem;letter-spacing:-0.4px}
@@ -1024,7 +1025,7 @@
 <!-- FOOTER -->
 <footer>
   <div class="foot-in">
-    <a href="#top" class="foot-brand"><span class="dot">im</span> imadevideo</a>
+    <a href="#top" class="foot-brand"><img class="favatar" src="data:image/jpeg;base64,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" alt=""> imadevideo</a>
     <div class="foot-links">
       <a href="https://instagram.com/imadevideo" target="_blank" rel="noopener">Instagram</a>
       <a href="#">TikTok</a>
@@ -1033,8 +1034,8 @@
     </div>
   </div>
   <div class="foot-legal">
-    © 2026 imadevideo · I Made Puja Endra. Semua hak dilindungi.<br>
-    Tidak berafiliasi dengan Apple Inc. maupun CapCut. "Apple-style" mengacu pada gaya visual, bukan produk resmi Apple.
+    © 2026 Mega Aset Editing · by I Made Puja Endra (@imadevideo). Semua hak dilindungi.<br>
+    Tidak berafiliasi dengan Apple, CapCut, maupun Adobe. Semua nama & gaya hanya sebagai referensi visual.
   </div>
 </footer>
 
