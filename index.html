@@ -433,9 +433,9 @@
 
   /* GARANSI */
   .garansi{max-width:620px;margin:3.4rem auto 0;text-align:center}
-  .garansi .shield{width:66px;height:66px;margin:0 auto 1.5rem;display:block;
-    pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
-    filter:drop-shadow(0 14px 30px rgba(195,255,0,0.45))}
+  .garansi .shield-wrap{position:relative;width:66px;height:66px;margin:0 auto 1.5rem;display:grid;place-items:center;pointer-events:none;isolation:isolate}
+  .garansi .shield-wrap::before{content:"";position:absolute;inset:-11px;border-radius:50%;background:radial-gradient(closest-side,rgba(195,255,0,0.36),transparent 76%);z-index:0}
+  .garansi .shield{width:66px;height:66px;display:block;position:relative;z-index:1;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
   .garansi h3{font-size:clamp(1.9rem,4.8vw,2.9rem);font-weight:800;letter-spacing:-1px;color:var(--text);margin-bottom:1.1rem;text-wrap:balance}
   .garansi .g-lead{color:var(--muted);font-size:clamp(1rem,2vw,1.12rem);line-height:1.8;max-width:500px;margin:0 auto 1.4rem;text-wrap:balance}
   .garansi .g-fine{color:var(--muted);opacity:0.62;font-size:0.84rem;line-height:1.7;max-width:430px;margin:0 auto;text-wrap:pretty}
@@ -932,7 +932,7 @@
     </div>
 
     <div class="garansi">
-      <svg class="shield" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <span class="shield-wrap" aria-hidden="true"><svg class="shield" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="shg" x1="24" y1="3" x2="24" y2="45" gradientUnits="userSpaceOnUse">
             <stop offset="0" stop-color="#eaff85"/><stop offset="0.55" stop-color="#c3ff00"/><stop offset="1" stop-color="#a2df00"/>
@@ -944,7 +944,7 @@
         <path d="M24 4l15 6.4v10.9c0 9.7-6.4 17.8-15 20-8.6-2.2-15-10.3-15-20V10.4L24 4z" fill="url(#shg)"/>
         <path d="M24 4l15 6.4v10.9c0 9.7-6.4 17.8-15 20-8.6-2.2-15-10.3-15-20V10.4L24 4z" fill="url(#shgloss)"/>
         <path d="M16.4 24.3l5 5 10.2-10.8" fill="none" stroke="#0a0a12" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      </svg></span>
       <h3>Garansi Pasti Bisa</h3>
       <p class="g-lead">Semua udah lengkap sama tutorial cara pasangnya, jadi dijamin kepake walau lo baru pertama kali. Kalau file kit-nya bener-bener gak bisa dibuka atau rusak dan kami gak bisa bantu benerin, uang lo balik 100%.</p>
       <p class="g-fine">Garansi berlaku untuk masalah teknis file. Bukan karena salah device (kit ini khusus CapCut Desktop, bukan HP) atau berubah pikiran. Syarat &amp; ketentuan berlaku.</p>
