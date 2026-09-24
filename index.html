@@ -330,6 +330,11 @@
   .kit-badge .kit-num{font-variant-numeric:tabular-nums}
   @keyframes badgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
   @media(prefers-reduced-motion:reduce){.kit-badge{animation:none}}
+  /* video preview (autoplay, muted, loop, tanpa kontrol). Muncul halus setelah siap diputar;
+     kalau file belum ada / autoplay diblokir, grid teks di bawahnya tetap tampil */
+  .kit-video{opacity:0;transition:opacity .45s ease;pointer-events:none;background:transparent}
+  .kit-video.ready{opacity:1}
+  .kit-video::-webkit-media-controls,.kit-video::-webkit-media-controls-start-playback-button{display:none!important;-webkit-appearance:none}
   .kit-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
   .kit-card:hover .kit-cover{transform:scale(1.05)}
   @media(prefers-reduced-motion:reduce){.kit-cover{transition:none}}
@@ -736,6 +741,9 @@
             <span class="sp blue">STORY<br>TELLING</span>
             <span class="sp pink">DESIGNING</span>
           </div>
+          <!-- VIDEO PREVIEW: taruh file di folder videos/ dengan nama ini -->
+          <video class="kit-cover kit-video" src="videos/preview-text-preset.mp4" autoplay muted loop playsinline preload="metadata"
+                 disablepictureinpicture disableremoteplayback aria-hidden="true" tabindex="-1"></video>
           <div class="kit-badge"><span class="kit-num" data-target="100">100</span>+</div>
         </div>
         <div class="kit-body">
@@ -1175,6 +1183,25 @@
   // yang di-flick lewat bisa "kelewat". Interval ini menyapu ulang tiap 250ms (berhenti
   // sendiri saat semua sudah muncul) → dijamin tidak ada elemen yang stuck.
   var iv = setInterval(function(){ sweep(); if(!pending.length) clearInterval(iv); }, 250);
+})();
+/* Video preview di card: selalu muted + loop, tanpa kontrol.
+   Diputar hanya saat kelihatan di layar (hemat baterai/data), fade-in setelah frame pertama siap. */
+(function(){
+  var vids = document.querySelectorAll('.kit-video');
+  if (!vids.length) return;
+  vids.forEach(function(v){
+    v.muted = true; v.defaultMuted = true;
+    var show = function(){ v.classList.add('ready'); };
+    v.addEventListener('playing', show);
+    v.addEventListener('loadeddata', function(){ if (!v.paused) show(); });
+    v.addEventListener('error', function(){ v.remove(); }, true);   // file belum ada → grid teks tetap tampil
+  });
+  var tryPlay = function(v){ var p = v.play(); if (p && p.catch) p.catch(function(){}); };
+  if (!('IntersectionObserver' in window)) { vids.forEach(tryPlay); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ e.isIntersecting ? tryPlay(e.target) : e.target.pause(); });
+  }, { rootMargin: '200px 0px' });
+  vids.forEach(function(v){ io.observe(v); });
 })();
 </script>
 
