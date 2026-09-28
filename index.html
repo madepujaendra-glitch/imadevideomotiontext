@@ -396,6 +396,26 @@
   .ba .before .frame{background:#15151d;color:var(--muted)}
   .ba .after .frame{background:radial-gradient(circle at 50% 40%,#1c1c28,#0d0d15);color:var(--text);border:1px solid rgba(195,255,0,0.15)}
 
+
+  /* YouTube: thumbnail dulu, iframe baru dimuat saat diklik (halaman tetap ringan) */
+  .yt{position:relative;overflow:hidden;cursor:pointer;isolation:isolate}
+  .yt .yt-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;transition:transform .6s var(--ease),filter .4s}
+  .yt::after{content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(6,6,10,0.05),rgba(6,6,10,0.55));pointer-events:none}
+  .yt:hover .yt-thumb{transform:scale(1.03)}
+  .yt > .play,.yt > .vtxt,.yt > .yt-play{z-index:1}
+  .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2}
+  .yt.playing::after{display:none}
+  .yt:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
+  .hero-video .vtxt{color:#f2f0ea;text-shadow:0 2px 12px rgba(0,0,0,0.6)}
+  .yt-play{position:relative;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#e3ff66,var(--primary));
+    display:grid;place-items:center;box-shadow:0 0 26px rgba(195,255,0,0.4);transition:transform .25s var(--ease)}
+  .yt-play svg{margin-left:2px}
+  .yt:hover .yt-play,.hero-video.yt:hover .play{transform:scale(1.08)}
+  .ba .frame.yt{aspect-ratio:16/9;padding:0}
+  .ba-cap{margin:0.9rem 0 0;font-weight:600;font-size:0.95rem;line-height:1.5}
+  .ba .before .ba-cap{color:var(--muted)}
+  .ba .after .ba-cap{color:var(--text)}
+
   /* TESTIMONIALS */
   .tgrid{display:flex;flex-wrap:wrap;justify-content:center;gap:1.2rem;margin-top:3rem}
   .tcard{flex:0 1 calc((100% - 2.4rem)/3);display:flex;flex-direction:column;
@@ -629,7 +649,8 @@
       <a href="#cara" class="hero-textlink">Apa aja yang didapat <span class="chev">&rsaquo;</span></a>
     </div>
     <p class="hero-note">Kalau lu males baca, liat aja <b>video 1 menit ini</b></p>
-    <div class="hero-video" onclick="this.querySelector('.vtxt').textContent='▶ Sambungkan video preview lo di sini'">
+    <div class="hero-video yt" data-yt="Xx-ncG6IbGY" role="button" tabindex="0" aria-label="Putar video preview Mega Aset Editing">
+      <img class="yt-thumb" src="https://i.ytimg.com/vi/Xx-ncG6IbGY/maxresdefault.jpg" alt="" loading="lazy" decoding="async">
       <div class="play"><svg width="20" height="20" viewBox="0 0 24 24" fill="#06060a"><path d="M7.5 6v12l9-6z"/></svg></div>
       <div class="vtxt">▶ Lihat preview Mega Aset Editing</div>
     </div>
@@ -883,11 +904,19 @@
     <div class="ba" style="text-align:left">
       <div class="col before">
         <div class="lbl">Before</div>
-        <div class="frame">Teks polos, kaku,<br>timing berantakan</div>
+        <div class="frame yt" data-yt="gbfGbricQbo" role="button" tabindex="0" aria-label="Putar video before">
+          <img class="yt-thumb" src="https://i.ytimg.com/vi/gbfGbricQbo/maxresdefault.jpg" alt="" loading="lazy" decoding="async">
+          <span class="yt-play"><svg width="18" height="18" viewBox="0 0 24 24" fill="#06060a"><path d="M7.5 6v12l9-6z"/></svg></span>
+        </div>
+        <p class="ba-cap">Teks polos, kaku, timing berantakan</p>
       </div>
       <div class="col after">
         <div class="lbl">After · imadevideo</div>
-        <div class="frame">Motion halus, premium,<br>keliatan mahal</div>
+        <div class="frame yt" data-yt="Xx-ncG6IbGY" role="button" tabindex="0" aria-label="Putar video after">
+          <img class="yt-thumb" src="https://i.ytimg.com/vi/Xx-ncG6IbGY/maxresdefault.jpg" alt="" loading="lazy" decoding="async">
+          <span class="yt-play"><svg width="18" height="18" viewBox="0 0 24 24" fill="#06060a"><path d="M7.5 6v12l9-6z"/></svg></span>
+        </div>
+        <p class="ba-cap">Motion halus, premium, keliatan mahal</p>
       </div>
     </div>
   </div>
@@ -1109,6 +1138,23 @@
 
 <div class="wa-lb" role="dialog" aria-modal="true" aria-label="Chat testimoni"><button type="button" class="x" aria-label="Tutup">&times;</button><img alt=""></div>
 <script>
+/* YouTube click-to-play */
+(function(){
+  function play(el){
+    if(el.classList.contains('playing')) return;
+    var id=el.getAttribute('data-yt');
+    var f=document.createElement('iframe');
+    f.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+    f.title='Video imadevideo';
+    f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.allowFullscreen=true;
+    el.appendChild(f); el.classList.add('playing');
+  }
+  document.querySelectorAll('.yt[data-yt]').forEach(function(el){
+    el.addEventListener('click',function(){ play(el); });
+    el.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); play(el); } });
+  });
+})();
 /* Carousel testimoni (HP): kartu aktif di tengah, titik penanda posisi */
 (function(){
   var g=document.querySelector('.wa-grid'), dotsEl=document.querySelector('.wa-dots');
