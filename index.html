@@ -660,6 +660,22 @@
       <div class="play"><svg width="20" height="20" viewBox="0 0 24 24" fill="#06060a"><path d="M7.5 6v12l9-6z"/></svg></div>
       <div class="vtxt">▶ Tonton preview Mega Aset Editing</div>
     </a>
+    <script>
+    /* Video utama: mulai muat player YouTube SEKARANG, tidak menunggu sisa halaman (±2MB) selesai diunduh */
+    (function(){
+      var a=document.querySelector('.hero-video.yt-link[data-yt]'); if(!a) return;
+      document.addEventListener('securitypolicyviolation',function(e){ if(/youtube/.test(e.blockedURI||'')) window.__ytBlocked=true; });
+      if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+      var id=a.getAttribute('data-yt'), f=document.createElement('iframe');
+      f.src='https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&loop=1&playlist='+id
+           +'&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin='+encodeURIComponent(location.origin);
+      f.title='Video imadevideo';
+      f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
+      f.setAttribute('allowfullscreen','');
+      f.referrerPolicy='strict-origin-when-cross-origin';
+      a.appendChild(f); a.classList.add('playing','muted-auto');
+    })();
+    </script>
   </div>
 </section>
 
@@ -1179,15 +1195,20 @@
     f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
     f.setAttribute('allowfullscreen','');
     f.referrerPolicy='strict-origin-when-cross-origin';
-    a._ready=false; a._queue=[]; a._heard=false; a._lastT=null;
-    // minta player mengirim status; diulang tiap 250ms sampai player menjawab
-    var tries=0;
-    a._hello=setInterval(function(){
-      if(a._heard || ++tries>60 || !f.contentWindow){ clearInterval(a._hello); return; }
-      try{ f.contentWindow.postMessage(JSON.stringify({event:'listening',id:id,channel:'widget'}),'*'); }catch(e){}
-    },250);
     a.appendChild(f); a.classList.add('playing');
     if(!withSound) a.classList.add('muted-auto');
+    attach(a,f);
+  }
+  // mulai "ngobrol" dengan player: status siap/jalan, antrean perintah, jaring pengaman
+  function attach(a,f){
+    var id=a.getAttribute('data-yt');
+    a._ready=false; a._queue=a._queue||[]; a._heard=false; a._lastT=null;
+    var tries=0;                          // sapa player tiap 250ms sampai menjawab
+    clearInterval(a._hello);
+    a._hello=setInterval(function(){
+      if(a._heard || ++tries>80 || !f.contentWindow){ clearInterval(a._hello); return; }
+      try{ f.contentWindow.postMessage(JSON.stringify({event:'listening',id:id,channel:'widget'}),'*'); }catch(e){}
+    },250);
     // jaring pengaman: kalau status player tidak terbaca, tampilkan setelah 5 detik
     clearTimeout(a._t); a._t=setTimeout(function(){ a._ready=true; a.classList.add('ready'); flush(a); },5000);
   }
@@ -1220,7 +1241,9 @@
   });
 
   if(hero && !REDUCE){
-    load(hero,false);                     // mulai muat sekarang, jangan tunggu scroll
+    // player video utama sudah dibuat lebih awal (script tepat setelah kotak video); kalau belum, buat sekarang
+    var early=hero.querySelector('iframe');
+    if(early) attach(hero,early); else load(hero,false);
     if('IntersectionObserver' in window){
       new IntersectionObserver(function(entries){
         entries.forEach(function(en){ cmd(hero, en.isIntersecting ? 'playVideo' : 'pauseVideo'); });
@@ -1251,8 +1274,7 @@
   }
 
   // YouTube diblokir (Frame Sources belum diisi)? → balik ke thumbnail; kalau dari klik, buka YouTube
-  document.addEventListener('securitypolicyviolation',function(e){
-    if(!/youtube/.test(e.blockedURI||'')) return;
+  function onBlocked(){
     blocked=true;
     links.forEach(function(a){
       var f=a.querySelector('iframe'); if(f) f.remove();
@@ -1260,6 +1282,10 @@
       a.classList.remove('playing','muted-auto','ready');
     });
     if(clicked){ window.open(clicked.href,'_blank','noopener'); clicked=null; }
+  }
+  if(window.__ytBlocked) onBlocked();
+  document.addEventListener('securitypolicyviolation',function(e){
+    if(/youtube/.test(e.blockedURI||'')) onBlocked();
   });
 })();
 /* Carousel testimoni (HP): kartu aktif di tengah, titik penanda posisi */
